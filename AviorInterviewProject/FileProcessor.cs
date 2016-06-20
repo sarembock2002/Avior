@@ -15,24 +15,8 @@ namespace AviorInterviewProject
     {
         public static String Directory = "C:\\Proj\\Example Files\\";
 
-        public static void ProcessFiles()
-        {
-
-            foreach (String filename in System.IO.Directory.GetFiles(FileProcessor.Directory))
-            {
-
-                //Check to see if there is already data
-                bool isData = FileProcessor.IsLoaded(filename);
-
-                if (!isData && File.Exists(filename) )
-                {
-                     FileProcessor.ProcessFile(filename);
-                }
-
-            }
-        }
-
-
+        public static int FilesProcessed = 0;
+        public static int FilesToProcess = 0;
 
         public static bool IsLoaded(String filename)
         {
@@ -54,13 +38,16 @@ namespace AviorInterviewProject
             dt.Columns.Add("Status", typeof(string));
 
             string connectionString = string.Format("provider=Microsoft.Jet.OLEDB.4.0; data source={0};Extended Properties=Excel 8.0;", filename);
-            string query = string.Format("SELECT * FROM [{0}$]", "DATA");
+            
             try
             {
                 DataSet data = new DataSet();
                 using (System.Data.OleDb.OleDbConnection con = new System.Data.OleDb.OleDbConnection(connectionString))
                 {
                     con.Open();
+                    var dtSchema = con.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, new object[] { null, null, null, "TABLE" });
+                    String Sheet1 = dtSchema.Rows[0].Field<string>("TABLE_NAME");
+                    string query = string.Format("SELECT TradeDate,	Contract,	Expiry,	Quantity,	Strike,	CallPut,	Spot,	Price,	Rate,	Origin FROM[{0}]", Sheet1);
                     System.Data.OleDb.OleDbDataAdapter adapter = new OleDbDataAdapter(query, con);
                     adapter.Fill(data);
                 }
@@ -76,7 +63,7 @@ namespace AviorInterviewProject
                         dr["Ticker"] = row[1].ToString();
                         dr["Expiry"] = Convert.ToDateTime(row[2]).Date;
                         dr["InstrumentType"] = row[5].ToString();
-                        dr["Strike"] = (row[4] is DBNull) ? 0 : Convert.ToDecimal(row[4]);
+                        dr["Strike"] = (row[4] is DBNull) ? 0 : double.Parse(row[4].ToString(),System.Globalization.NumberStyles.Currency);
                         dr["Volatility"] = (row[8] is DBNull) ? 0 : Convert.ToDecimal(row[8]);
                         dr["Premium"] = (row[7] is DBNull) ? 0 : Convert.ToDecimal(row[7]);
                         dr["Quantity"] = (row[3] is DBNull) ? 0 : Convert.ToDecimal(row[3]);
@@ -86,10 +73,12 @@ namespace AviorInterviewProject
                 }
 
                 DBAccess.BulkInsert(DBAccess.ConnectionString, DBAccess.TableName, dt);
+
+                FileProcessor.FilesProcessed++;
             }
             catch(Exception e)
             {
-
+                Console.WriteLine(e.Message);
             }       
 
         }

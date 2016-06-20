@@ -20,7 +20,8 @@ namespace AviorInterviewProject
                 string database = "RECM";
                 string userId = "jvanniekerk";
                 string password = "P@ssword";
-                return string.Format("Server={0};Database={1};User ID={2};Password={3}", server, database, userId, password); 
+                //return string.Format("Server={0};Database={1};User ID={2};Password={3}", server, database, userId, password); 
+                return "Data Source=localhost;" +"Initial Catalog=Avior;" +"Integrated Security=SSPI;";
             }
         }
 

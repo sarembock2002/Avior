@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,12 +35,38 @@ namespace AviorInterviewProject
             {
                 FileProcessor.Directory = folderBrowserDialog1.SelectedPath;
                 textBox1.Text = FileProcessor.Directory;
+
+                FileProcessor.FilesToProcess = Directory.GetFiles(FileProcessor.Directory).Length;
+                label5.Text = FileProcessor.FilesToProcess.ToString();
             }
         }
 
         private void btnProcessFiles_Click(object sender, EventArgs e)
         {
-            FileProcessor.ProcessFiles();
+            progressBar1.Value = 0;
+
+            FileProcessor.FilesProcessed = 0;
+
+            foreach (String filename in System.IO.Directory.GetFiles(FileProcessor.Directory))
+            {
+
+                //Check to see if there is already data
+                bool isData = FileProcessor.IsLoaded(filename);
+
+                progressBar1.Maximum = FileProcessor.FilesToProcess;
+                
+
+                if (!isData && File.Exists(filename))
+                {
+                    FileProcessor.ProcessFile(filename);
+                    progressBar1.PerformStep();
+                    
+                }
+            }
+
+            label6.Text = FileProcessor.FilesProcessed.ToString();
         }
+
+        
     }
 }
