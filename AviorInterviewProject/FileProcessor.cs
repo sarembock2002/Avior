@@ -25,6 +25,12 @@ namespace AviorInterviewProject
             return DBAccess.DataExists(DBAccess.ConnectionString, DBAccess.TableName, fileNameStrings[fileNameStrings.Length-1]);
         }
 
+        public static void DeleteFileData(String filename)
+        {
+            String[] fileNameStrings = filename.Split(' ');
+            DBAccess.DeletefileData(DBAccess.ConnectionString, DBAccess.TableName, fileNameStrings[fileNameStrings.Length - 1]);
+        }
+
         public static void ProcessFile(String filename)
         {
 

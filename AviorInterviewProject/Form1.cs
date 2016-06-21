@@ -38,7 +38,7 @@ namespace AviorInterviewProject
                 FileProcessor.Directory = folderBrowserDialog1.SelectedPath;
                 textBox1.Text = FileProcessor.Directory;
 
-                FileProcessor.FilesToProcess = Directory.GetFiles(FileProcessor.Directory).Length;
+                FileProcessor.FilesToProcess = Directory.GetFiles(FileProcessor.Directory, "*Options Traded*xls").Length;
                 label5.Text = FileProcessor.FilesToProcess.ToString();
             }
         }
@@ -46,31 +46,43 @@ namespace AviorInterviewProject
         //On pressing Process Files
         private void btnProcessFiles_Click(object sender, EventArgs e)
         {
-
             //Initialise variables
             progressBar1.Value = 0;
+            label1.Text = "Processing...";
 
             FileProcessor.FilesProcessed = 0;
             FileProcessor.ProcessedFileNames = new List<string>();
 
-            foreach (String filename in System.IO.Directory.GetFiles(FileProcessor.Directory))
+            //Specific search pattern for only files which comply
+            foreach (String filename in System.IO.Directory.GetFiles(FileProcessor.Directory,"*Options Traded*xls"))
             {
+
+                //Indicates when the available files are loaded
+                progressBar1.Maximum = FileProcessor.FilesToProcess;
+
+                if (checkBoxOverWrite.Checked)
+                {
+                    FileProcessor.DeleteFileData(filename);
+                }
 
                 //Check to see if there is already data
                 bool isData = FileProcessor.IsLoaded(filename);
-                
-                //Indicates when the available files are loaded
-                progressBar1.Maximum = 1;
 
                 //If there is data and overwrite is checked OR there is no data
-                if ((!isData || (isData && checkBoxOverWrite.Checked) )  && File.Exists(filename))
+                if (!isData   && File.Exists(filename))
                 {
+                    
                     FileProcessor.ProcessFile(filename);
-                    FileProcessor.ProcessedFileNames.Add(filename);     
+                    FileProcessor.ProcessedFileNames.Add(filename);
+                    progressBar1.PerformStep();
+                    label6.Text = FileProcessor.FilesProcessed.ToString();
+
                 }
             }
-            progressBar1.PerformStep();
-            label6.Text = FileProcessor.FilesProcessed.ToString();
+
+            label1.Text = "Files processed:";
+
+
         }
 
         //Show Files that are processed

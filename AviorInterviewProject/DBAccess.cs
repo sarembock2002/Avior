@@ -101,6 +101,28 @@ namespace AviorInterviewProject
             }
         }
 
+        //Delete data relating to s specific file
+        public static void DeletefileData(string connection, string table, String date)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(connection))
+                {
+                    String sqlDate = date.Substring(0, 4) + "-" + date.Substring(4, 2) + "-" + date.Substring(6, 2);
+                    con.Open();
+                    String commandText = String.Format("delete from {0} where TradeDate = '{1}'", table, sqlDate);
+                    SqlCommand cmd = new SqlCommand(commandText, con);
+                    cmd.ExecuteNonQuery();
+
+         
+                }
+            }
+            catch (Exception ex)
+            {
+                    throw new Exception("error trying to delete specific file data '" + table + "': " + ex.Message, ex);
+            }
+        }
+
         public static DataTable ToDataTable<T>(this IList<T> data)
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(T));
