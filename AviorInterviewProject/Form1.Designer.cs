@@ -41,11 +41,13 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.btnDisplayFiles = new System.Windows.Forms.Button();
+            this.checkBoxOverWrite = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // btnClearDB
             // 
-            this.btnClearDB.Location = new System.Drawing.Point(3, 78);
+            this.btnClearDB.Location = new System.Drawing.Point(22, 78);
             this.btnClearDB.Name = "btnClearDB";
             this.btnClearDB.Size = new System.Drawing.Size(75, 72);
             this.btnClearDB.TabIndex = 0;
@@ -55,7 +57,7 @@
             // 
             // btnUploadTestData
             // 
-            this.btnUploadTestData.Location = new System.Drawing.Point(84, 78);
+            this.btnUploadTestData.Location = new System.Drawing.Point(103, 78);
             this.btnUploadTestData.Name = "btnUploadTestData";
             this.btnUploadTestData.Size = new System.Drawing.Size(75, 72);
             this.btnUploadTestData.TabIndex = 1;
@@ -65,7 +67,7 @@
             // 
             // btnProcessFiles
             // 
-            this.btnProcessFiles.Location = new System.Drawing.Point(165, 78);
+            this.btnProcessFiles.Location = new System.Drawing.Point(184, 78);
             this.btnProcessFiles.Name = "btnProcessFiles";
             this.btnProcessFiles.Size = new System.Drawing.Size(75, 72);
             this.btnProcessFiles.TabIndex = 2;
@@ -76,7 +78,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(15, 23);
+            this.label4.Location = new System.Drawing.Point(12, 28);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(85, 13);
             this.label4.TabIndex = 8;
@@ -84,11 +86,11 @@
             // 
             // btnSelectDirectory
             // 
-            this.btnSelectDirectory.Location = new System.Drawing.Point(106, 18);
+            this.btnSelectDirectory.Location = new System.Drawing.Point(97, 23);
             this.btnSelectDirectory.Name = "btnSelectDirectory";
-            this.btnSelectDirectory.Size = new System.Drawing.Size(75, 23);
+            this.btnSelectDirectory.Size = new System.Drawing.Size(32, 23);
             this.btnSelectDirectory.TabIndex = 9;
-            this.btnSelectDirectory.Text = "Select";
+            this.btnSelectDirectory.Text = "...";
             this.btnSelectDirectory.UseVisualStyleBackColor = true;
             this.btnSelectDirectory.Click += new System.EventHandler(this.btnSelectDirectory_Click);
             // 
@@ -103,7 +105,7 @@
             // 
             this.progressBar1.Location = new System.Drawing.Point(15, 211);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(216, 23);
+            this.progressBar1.Size = new System.Drawing.Size(254, 23);
             this.progressBar1.TabIndex = 11;
             // 
             // label1
@@ -136,24 +138,46 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(129, 173);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(35, 13);
+            this.label5.Size = new System.Drawing.Size(0, 13);
             this.label5.TabIndex = 15;
-            this.label5.Text = "";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(129, 186);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(35, 13);
+            this.label6.Size = new System.Drawing.Size(0, 13);
             this.label6.TabIndex = 16;
-            this.label6.Text = "";
+            // 
+            // btnDisplayFiles
+            // 
+            this.btnDisplayFiles.Location = new System.Drawing.Point(184, 182);
+            this.btnDisplayFiles.Name = "btnDisplayFiles";
+            this.btnDisplayFiles.Size = new System.Drawing.Size(27, 21);
+            this.btnDisplayFiles.TabIndex = 17;
+            this.btnDisplayFiles.Text = "...";
+            this.btnDisplayFiles.UseVisualStyleBackColor = true;
+            this.btnDisplayFiles.Click += new System.EventHandler(this.btnDisplayFiles_Click);
+            // 
+            // checkBoxOverWrite
+            // 
+            this.checkBoxOverWrite.AutoSize = true;
+            this.checkBoxOverWrite.Checked = true;
+            this.checkBoxOverWrite.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxOverWrite.Location = new System.Drawing.Point(135, 27);
+            this.checkBoxOverWrite.Name = "checkBoxOverWrite";
+            this.checkBoxOverWrite.Size = new System.Drawing.Size(142, 17);
+            this.checkBoxOverWrite.TabIndex = 18;
+            this.checkBoxOverWrite.Text = "Overwrite Existing Data?";
+            this.checkBoxOverWrite.UseVisualStyleBackColor = true;
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(244, 246);
+            this.ClientSize = new System.Drawing.Size(281, 283);
+            this.Controls.Add(this.checkBoxOverWrite);
+            this.Controls.Add(this.btnDisplayFiles);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label3);
@@ -188,6 +212,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button btnDisplayFiles;
+        private System.Windows.Forms.CheckBox checkBoxOverWrite;
     }
 }
 

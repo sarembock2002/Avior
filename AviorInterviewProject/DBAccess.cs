@@ -16,12 +16,11 @@ namespace AviorInterviewProject
         {
             get
             {
-                string server = "ZDT-CE683\\MARK"; // Note connects over port 1433 so you may need to add a firewall exception on this port
-                string database = "RECM";
-                string userId = "jvanniekerk";
-                string password = "P@ssword";
-                //return string.Format("Server={0};Database={1};User ID={2};Password={3}", server, database, userId, password); 
-                return "Data Source=localhost;" +"Initial Catalog=Avior;" +"Integrated Security=SSPI;";
+                string server = "avior-mssql-1.cgfvn3vetizv.eu-west-1.rds.amazonaws.com"; // Note connects over port 1433 so you may need to add a firewall exception on this port
+                string database = "Interviewee";
+                string userId = "Mark";
+                string password = "M@rk";
+                return string.Format("Server={0};Database={1};User ID={2};Password={3}", server, database, userId, password);
             }
         }
 
@@ -33,6 +32,8 @@ namespace AviorInterviewProject
             }
         }
 
+
+        //Clear DB
         public static void ClearDBTable(string connection, string table)
         {
             try
@@ -75,31 +76,31 @@ namespace AviorInterviewProject
             }
         }
 
-        /*public static bool DataExists (string connection, string table , Date date)
+        //Check if Data exists for a given day
+        public static bool DataExists (string connection, string table , String date)
         {
             try
             {
                 using (SqlConnection con = new SqlConnection(connection))
                 {
+                    String sqlDate = date.Substring(0, 4) + "-" + date.Substring(4, 2) + "-" + date.Substring(6, 2);
                     con.Open();
-                    String commandText = String.Format("select * from {0} where ", table);
+                    String commandText = String.Format("select * from {0} where TradeDate = '{1}'", table, sqlDate);
                     SqlCommand cmd = new SqlCommand(commandText, con);
-                    cmd.ExecuteNonQuery();
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows) return true;
+                    }
+                    return false;
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("error trying to clear table '" + table + "': " + ex.Message, ex);
+                throw new Exception("error trying to check if there is data '" + table + "': " + ex.Message, ex);
             }
-        }*/
+        }
 
-        /// <summary>
-        /// This is used to convert the LINQ to SQL table classes to DataTables. The code is from Mary Hamlin's solution to this question:
-        /// http://stackoverflow.com/questions/564366/convert-generic-list-enumerable-to-datatable/5805044#5805044
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="data"></param>
-        /// <returns></returns>
         public static DataTable ToDataTable<T>(this IList<T> data)
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(T));

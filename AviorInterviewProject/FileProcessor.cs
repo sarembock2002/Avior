@@ -15,16 +15,20 @@ namespace AviorInterviewProject
     {
         public static String Directory = "C:\\Proj\\Example Files\\";
 
-        public static int FilesProcessed = 0;
-        public static int FilesToProcess = 0;
+        public static int FilesProcessed = 0; //Amount of Files processed
+        public static int FilesToProcess = 0; //Files to Process
+        public static List<String> ProcessedFileNames = new List<String>();
 
         public static bool IsLoaded(String filename)
         {
-            return false;
+            String[] fileNameStrings = filename.Split(' ');
+            return DBAccess.DataExists(DBAccess.ConnectionString, DBAccess.TableName, fileNameStrings[fileNameStrings.Length-1]);
         }
 
         public static void ProcessFile(String filename)
         {
+
+            //Create Datatable
             DataTable dt = new DataTable();
             dt.Columns.Add("TradeDate", typeof(DateTime));
             dt.Columns.Add("TradeTime", typeof(TimeSpan)); //DAN TO DO: Check datatype here...
@@ -37,6 +41,7 @@ namespace AviorInterviewProject
             dt.Columns.Add("Quantity", typeof(int));
             dt.Columns.Add("Status", typeof(string));
 
+            //Excel Connection string
             string connectionString = string.Format("provider=Microsoft.Jet.OLEDB.4.0; data source={0};Extended Properties=Excel 8.0;", filename);
             
             try
@@ -45,8 +50,11 @@ namespace AviorInterviewProject
                 using (System.Data.OleDb.OleDbConnection con = new System.Data.OleDb.OleDbConnection(connectionString))
                 {
                     con.Open();
+                    //Get first sheet name
                     var dtSchema = con.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, new object[] { null, null, null, "TABLE" });
                     String Sheet1 = dtSchema.Rows[0].Field<string>("TABLE_NAME");
+
+                    //Select Fields in order
                     string query = string.Format("SELECT TradeDate,	Contract,	Expiry,	Quantity,	Strike,	CallPut,	Spot,	Price,	Rate,	Origin FROM[{0}]", Sheet1);
                     System.Data.OleDb.OleDbDataAdapter adapter = new OleDbDataAdapter(query, con);
                     adapter.Fill(data);
@@ -56,6 +64,10 @@ namespace AviorInterviewProject
                 {
                     DataRow dr = dt.NewRow();
 
+                    var CultureInfo = new System.Globalization.CultureInfo("en-ZA");
+
+
+                    //Convert datatypes
                     if (row[0].GetType() == typeof(DateTime))
                     {
                         dr["TradeDate"] = Convert.ToDateTime(row[0]).Date;
@@ -63,10 +75,10 @@ namespace AviorInterviewProject
                         dr["Ticker"] = row[1].ToString();
                         dr["Expiry"] = Convert.ToDateTime(row[2]).Date;
                         dr["InstrumentType"] = row[5].ToString();
-                        dr["Strike"] = (row[4] is DBNull) ? 0 : double.Parse(row[4].ToString(),System.Globalization.NumberStyles.Currency);
-                        dr["Volatility"] = (row[8] is DBNull) ? 0 : Convert.ToDecimal(row[8]);
-                        dr["Premium"] = (row[7] is DBNull) ? 0 : Convert.ToDecimal(row[7]);
-                        dr["Quantity"] = (row[3] is DBNull) ? 0 : Convert.ToDecimal(row[3]);
+                        dr["Strike"] = (row[4] is DBNull) ? 0 : double.Parse(row[4].ToString().Replace("R","").Replace(" ", ""), System.Globalization.NumberStyles.Currency,CultureInfo);
+                        dr["Volatility"] = (row[8] is DBNull) ? 0 : double.Parse(row[8].ToString().Replace("R", "").Replace(" ", ""), System.Globalization.NumberStyles.Currency, CultureInfo);
+                        dr["Premium"] = (row[7] is DBNull) ? 0 : double.Parse(row[7].ToString().Replace("R", "").Replace(" ", ""), System.Globalization.NumberStyles.Currency, CultureInfo);
+                        dr["Quantity"] = (row[3] is DBNull) ? 0 : double.Parse(row[3].ToString().Replace("R", "").Replace(" ", ""), System.Globalization.NumberStyles.Currency, CultureInfo);
                         dr["Status"] = row[9].ToString();
                         dt.Rows.Add(dr);
                     }
