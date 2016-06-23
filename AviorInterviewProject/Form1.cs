@@ -48,7 +48,8 @@ namespace AviorInterviewProject
         {
             //Initialise variables
             progressBar1.Value = 0;
-            label1.Text = "Processing...";
+            label1.Text = "Busy..";
+
 
             FileProcessor.FilesProcessed = 0;
             FileProcessor.ProcessedFileNames = new List<string>();
@@ -90,5 +91,7 @@ namespace AviorInterviewProject
         {
             MessageBox.Show(string.Join("\n", FileProcessor.ProcessedFileNames.ToArray()),"Processed Files");
         }
+
+        
     }
 }

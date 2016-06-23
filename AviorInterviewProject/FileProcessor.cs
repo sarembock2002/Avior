@@ -70,9 +70,6 @@ namespace AviorInterviewProject
                 {
                     DataRow dr = dt.NewRow();
 
-                    var CultureInfo = new System.Globalization.CultureInfo("en-ZA");
-
-
                     //Convert datatypes
                     if (row[0].GetType() == typeof(DateTime))
                     {
@@ -81,10 +78,10 @@ namespace AviorInterviewProject
                         dr["Ticker"] = row[1].ToString();
                         dr["Expiry"] = Convert.ToDateTime(row[2]).Date;
                         dr["InstrumentType"] = row[5].ToString();
-                        dr["Strike"] = (row[4] is DBNull) ? 0 : double.Parse(row[4].ToString().Replace("R","").Replace(" ", ""), System.Globalization.NumberStyles.Currency,CultureInfo);
-                        dr["Volatility"] = (row[8] is DBNull) ? 0 : double.Parse(row[8].ToString().Replace("R", "").Replace(" ", ""), System.Globalization.NumberStyles.Currency, CultureInfo);
-                        dr["Premium"] = (row[7] is DBNull) ? 0 : double.Parse(row[7].ToString().Replace("R", "").Replace(" ", ""), System.Globalization.NumberStyles.Currency, CultureInfo);
-                        dr["Quantity"] = (row[3] is DBNull) ? 0 : double.Parse(row[3].ToString().Replace("R", "").Replace(" ", ""), System.Globalization.NumberStyles.Currency, CultureInfo);
+                        dr["Strike"] = (row[4] is DBNull) ? 0 : Convert.ToDecimal((row[4].ToString().Replace("R","").Replace(" ", "")));
+                        dr["Volatility"] = (row[8] is DBNull) ? 0 : Convert.ToDecimal((row[8].ToString().Replace("R", "").Replace(" ", "")));
+                        dr["Premium"] = (row[7] is DBNull) ? 0 : Convert.ToDecimal((row[7].ToString().Replace("R", "").Replace(" ", "")));
+                        dr["Quantity"] = (row[3] is DBNull) ? 0 : Convert.ToDecimal((row[3].ToString().Replace("R", "").Replace(" ", "")));
                         dr["Status"] = row[9].ToString();
                         dt.Rows.Add(dr);
                     }

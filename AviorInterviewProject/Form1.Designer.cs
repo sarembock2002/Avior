@@ -96,11 +96,11 @@
             // 
             // textBox1
             // 
+            this.textBox1.Enabled = false;
             this.textBox1.Location = new System.Drawing.Point(12, 47);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(219, 20);
             this.textBox1.TabIndex = 10;
-            this.textBox1.Enabled = false;
             // 
             // progressBar1
             // 
@@ -117,6 +117,7 @@
             this.label1.Size = new System.Drawing.Size(83, 13);
             this.label1.TabIndex = 12;
             this.label1.Text = "Files processed:";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
